@@ -90,25 +90,26 @@ The BPMN diagram shows the business flow between users and the system, while the
 
 The ERD for the Road Accident Reporting & Blackspot Detection System contains five core entities with the required relationships:
 
-Relationships
-Entity A	Relationship	Entity B	Cardinality	Notes
-LOCATIONS	1 → Many	ACCIDENTS	One location can have many accidents	Location_ID = FK in ACCIDENTS
-LOCATIONS	1 → 1	BLACKSPOTS	One location has one blackspot record	Location_ID = UNIQUE FK
-LOCATIONS	1 → Many	ANALYTICS	One location has many analytics summaries	Location_ID = FK
-USERS	1 → Many	ACCIDENTS	One user may report many accidents	User_ID optional FK
-ERD Structure
+| Entity A  | Relationship | Entity B   | Cardinality                             | Notes                             |
+| --------- | ------------ | ---------- | --------------------------------------- | --------------------------------- |
+| LOCATIONS | 1 → Many     | ACCIDENTS  | One location can have many accidents    | `Location_ID` = FK in `ACCIDENTS` |
+| LOCATIONS | 1 → 1        | BLACKSPOTS | One location has one blackspot          | `Location_ID` = UNIQUE FK         |
+| LOCATIONS | 1 → Many     | ANALYTICS  | One location has many analytics entries | `Location_ID` = FK                |
+| USERS     | 1 → Many     | ACCIDENTS  | One user may record many accidents      | `User_ID` optional FK             |
+## ERD Structure
+
 LOCATIONS (PK: Location_ID)
  ├── GPS_Coordinates
  ├── Road_Name
  ├── District
  ├── Sector
  └── Created_At
-        │
-        │ 1..∞
-        ▼
+         │
+         │ 1..∞
+         ▼
 ACCIDENTS (PK: Accident_ID)
  ├── Location_ID (FK)
- ├── User_ID (FK, optional)
+ ├── User_ID (FK)
  ├── Severity
  ├── Cause
  ├── Injuries
@@ -124,67 +125,79 @@ USERS 1 ─── ∞ ACCIDENTS (FK: User_ID)
 
 ## 6.2 Data Dictionary
 LOCATIONS
-Attribute	Type	Constraints
-Location_ID	NUMBER(10)	PK, NOT NULL
-GPS_Coordinates	VARCHAR2(50)	NOT NULL, UNIQUE
-Road_Name	VARCHAR2(100)	NOT NULL
-District	VARCHAR2(50)	NOT NULL
-Sector	VARCHAR2(50)	NULL
-Created_At	DATE	DEFAULT SYSDATE
+| Attribute       | Type          | Constraints      |
+| --------------- | ------------- | ---------------- |
+| Location_ID     | NUMBER(10)    | PK, NOT NULL     |
+| GPS_Coordinates | VARCHAR2(50)  | NOT NULL, UNIQUE |
+| Road_Name       | VARCHAR2(100) | NOT NULL         |
+| District        | VARCHAR2(50)  | NOT NULL         |
+| Sector          | VARCHAR2(50)  | NULL             |
+| Created_At      | DATE          | DEFAULT SYSDATE  |
+
 ACCIDENTS
-Attribute	Type	Constraints
-Accident_ID	NUMBER(10)	PK, NOT NULL
-Location_ID	NUMBER(10)	FK, NOT NULL
-User_ID	NUMBER(10)	FK, NULL
-Severity	NUMBER(1)	CHECK(Severity BETWEEN 1 AND 5)
-Cause	VARCHAR2(200)	NULL
-Injuries	NUMBER	DEFAULT 0
-Deaths	NUMBER	DEFAULT 0
-Accident_Time	TIMESTAMP WITH TIME ZONE	NOT NULL
-Created_At	DATE	DEFAULT SYSDATE
+| Attribute     | Type                     | Constraints                     |
+| ------------- | ------------------------ | ------------------------------- |
+| Accident_ID   | NUMBER(10)               | PK, NOT NULL                    |
+| Location_ID   | NUMBER(10)               | FK, NOT NULL                    |
+| User_ID       | NUMBER(10)               | FK, NULL                        |
+| Severity      | NUMBER(1)                | CHECK(Severity BETWEEN 1 AND 5) |
+| Cause         | VARCHAR2(200)            | NULL                            |
+| Injuries      | NUMBER                   | DEFAULT 0                       |
+| Deaths        | NUMBER                   | DEFAULT 0                       |
+| Accident_Time | TIMESTAMP WITH TIME ZONE | NOT NULL                        |
+| Created_At    | DATE                     | DEFAULT SYSDATE                 |
+
 BLACKSPOTS
-Attribute	Type	Constraints
-Blackspot_ID	NUMBER(10)	PK, NOT NULL
-Location_ID	NUMBER(10)	FK, UNIQUE, NOT NULL
-Risk_Level	VARCHAR2(10)	CHECK(Risk_Level IN ('High','Medium','Low'))
-Total_Accidents	NUMBER	DEFAULT 0
-Updated_At	DATE	DEFAULT SYSDATE
+| Attribute       | Type         | Constraints                                  |
+| --------------- | ------------ | -------------------------------------------- |
+| Blackspot_ID    | NUMBER(10)   | PK, NOT NULL                                 |
+| Location_ID     | NUMBER(10)   | FK, UNIQUE, NOT NULL                         |
+| Risk_Level      | VARCHAR2(10) | CHECK(Risk_Level IN ('High','Medium','Low')) |
+| Total_Accidents | NUMBER       | DEFAULT 0                                    |
+| Updated_At      | DATE         | DEFAULT SYSDATE                              |
+
 ANALYTICS
-Attribute	Type	Constraints
-Analytics_ID	NUMBER(10)	PK, NOT NULL
-Location_ID	NUMBER(10)	FK, NOT NULL
-Time_Period	DATE	NOT NULL
-Total_Accidents	NUMBER	NOT NULL
-Fatal_Accidents	NUMBER	NOT NULL
-Updated_At	DATE	DEFAULT SYSDATE
+| Attribute       | Type       | Constraints     |
+| --------------- | ---------- | --------------- |
+| Analytics_ID    | NUMBER(10) | PK, NOT NULL    |
+| Location_ID     | NUMBER(10) | FK, NOT NULL    |
+| Time_Period     | DATE       | NOT NULL        |
+| Total_Accidents | NUMBER     | NOT NULL        |
+| Fatal_Accidents | NUMBER     | NOT NULL        |
+| Updated_At      | DATE       | DEFAULT SYSDATE |
+
 USERS
-Attribute	Type	Constraints
-User_ID	NUMBER(10)	PK, NOT NULL
-Username	VARCHAR2(50)	UNIQUE, NOT NULL
-Role	VARCHAR2(20)	CHECK(Role IN ('Admin','Analyst','Officer'))
-Password_Hash	VARCHAR2(200)	NOT NULL
-Created_At	DATE	DEFAULT SYSDATE
+| Attribute     | Type          | Constraints                                  |
+| ------------- | ------------- | -------------------------------------------- |
+| User_ID       | NUMBER(10)    | PK, NOT NULL                                 |
+| Username      | VARCHAR2(50)  | UNIQUE, NOT NULL                             |
+| Role          | VARCHAR2(20)  | CHECK(Role IN ('Admin','Analyst','Officer')) |
+| Password_Hash | VARCHAR2(200) | NOT NULL                                     |
+| Created_At    | DATE          | DEFAULT SYSDATE                              |
+
 
 ## 6.3 Normalization Check (3NF)
-Table	3NF Check	Result
-LOCATIONS	No non-key attribute depends on another non-key attribute	✔ Pass
-ACCIDENTS	Severity/Cause depend only on Accident_ID	✔ Pass
-BLACKSPOTS	Location_ID is unique, no transitive dependency	✔ Pass
-ANALYTICS	All fields depend only on Analytics_ID	✔ Pass
-USERS	Username/Role/Password depend only on User_ID	✔ Pass
+| Table      | 3NF Check Result |
+| ---------- | ---------------- |
+| LOCATIONS  | Passes 3NF       |
+| ACCIDENTS  | Passes 3NF       |
+| BLACKSPOTS | Passes 3NF       |
+| ANALYTICS  | Passes 3NF       |
+| USERS      | Passes 3NF       |
+
 
 📌 Conclusion: Entire database is fully normalized to Third Normal Form (3NF).
 
 ## 6.4 Assumptions
 
-Time_Period in ANALYTICS represents an aggregation period (e.g., monthly).
+1. Time_Period in ANALYTICS represents an aggregation period (e.g., monthly).
 
-Passwords stored in USERS will be encrypted/hashed.
+2. Passwords stored in USERS will be encrypted/hashed.
 
-A single Location_ID uniquely identifies a road segment blackspot.
+3. A single Location_ID uniquely identifies a road segment blackspot.
 
-Users can optionally be linked to accidents (for audit purposes).
+4. Users can optionally be linked to accidents (for audit purposes).
 
-BLACKSPOTS table is maintained automatically by PL/SQL triggers.
+5. BLACKSPOTS table is maintained automatically by PL/SQL triggers.
 
-GPS coordinates are stored as unique identifiers for locations.
+6. GPS coordinates are stored as unique identifiers for locations.
