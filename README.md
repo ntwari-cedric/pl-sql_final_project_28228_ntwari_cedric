@@ -1,6 +1,6 @@
 Road Accident Reporting & Blackspot Detection System
 
-## 1. Project Overview
+##  Project Overview
 
 This is a multi-phase individual capstone project centered on Oracle database design, PL/SQL development, and Business 
 Intelligence (BI) implementation. The goal is to build a production-ready database solution with analytical capabilities.
@@ -12,12 +12,12 @@ Intelligence (BI) implementation. The goal is to build a production-ready databa
 
 ---
 
-## 2. Problem Statement (Phase I)
+## 1 Problem Statement (Phase I)
 
 The system addresses the core issue of **delayed and manual identification of accident-prone areas (blackspots)**.
 Conventional road accident reporting relies on manual aggregation of data, which delays critical safety interventions.
 
-## 3. Solution and Innovation
+## 1.1. Solution and Innovation
 
 The key innovation lies in the **automatic identification of blackspots** using pre-defined accident frequency and severity thresholds. 
 This automation, implemented via PL/SQL triggers and stored procedures, ensures **near real-time updates and analysis**.
@@ -33,7 +33,7 @@ This automation, implemented via PL/SQL triggers and stored procedures, ensures 
 The system uses PL/SQL triggers and stored procedures to ensure continuous monitoring, automated blackspot updates,
 and accurate analytics in near real-time.
 
-## 4. Database Schema Summary
+## 1.2. Database Schema Summary
 
 The system is built on a relational structure featuring 5 core tables:
 
@@ -45,11 +45,11 @@ The system is built on a relational structure featuring 5 core tables:
 | **USERS** | System access and user roles (Admin, Analyst, Operator). | `Role`, `Username`. |
 | **ANALYTICS** | Summary data for BI reporting based on time periods. | `Time Period`, `Total Accidents`, `Fatal Accidents`. |
 
-## 5. Phase II – Business Process Modeling (UML & BPMN)
+## 2. Phase II – Business Process Modeling (UML & BPMN)
 
 This phase models the core business workflow of the Road Accident Reporting & Blackspot Detection System using BPMN and UML diagrams. These diagrams describe how accident information flows from field reporting to automated blackspot updates.
 
-## 5.1 BPMN Diagram – Accident Reporting & Blackspot Detection
+## 2.1 BPMN Diagram – Accident Reporting & Blackspot Detection
 
 The BPMN diagram represents:
 
@@ -64,7 +64,7 @@ The BPMN diagram represents:
 BPMN Diagram:
 ![BPMN Diagram](https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/bpmn%20diagram.png?raw=true)
 
-## 5.2 UML Activity Diagram – System Workflow
+## 2.2 UML Activity Diagram – System Workflow
 
 The UML Activity Diagram illustrates the technical workflow:
 
@@ -79,14 +79,14 @@ Analytics update
 UML Activity Diagram:
 ![UML Diagram](https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/UML%20diagram.png?raw=true)
 
-## 5.3 Phase II Explanation
+## 2.3 Phase II Explanation
 
 The system follows a structured accident reporting workflow. Traffic officers submit accident data (severity, location, injuries, deaths) into the system. After validation, the data is saved into the ACCIDENTS table. A PL/SQL trigger evaluates whether the accident location meets the threshold to be classified as a blackspot and updates the BLACKSPOTS table automatically.
 
 The BPMN diagram shows the business flow between users and the system, while the UML activity diagram shows the internal system operations. Together, they demonstrate how the system supports MIS objectives such as faster reporting, automated risk detection, and improved road-safety decision-making.
 
-## 6. Phase III – Logical Database Design (ERD + Data Dictionary + 3NF)
-## 6.1 ER Diagram (Logical Model)
+## 3. Phase III – Logical Database Design (ERD + Data Dictionary + 3NF)
+## 3.1 ER Diagram (Logical Model)
 
 The ERD for the Road Accident Reporting & Blackspot Detection System contains five core entities with the required relationships:
 
@@ -124,7 +124,7 @@ LOCATIONS 1 ─── ∞ ANALYTICS (FK: Location_ID)
 USERS 1 ─── ∞ ACCIDENTS (FK: User_ID)
 
 
-## 6.2 Data Dictionary
+## 3.2 Data Dictionary
 LOCATIONS
 | Attribute       | Type          | Constraints      |
 | --------------- | ------------- | ---------------- |
@@ -177,7 +177,7 @@ USERS
 | Created_At    | DATE          | DEFAULT SYSDATE                              |
 
 
-## 6.3 Normalization Check (3NF)
+## 3.3 Normalization Check (3NF)
 | Table      | 3NF Check Result |
 | ---------- | ---------------- |
 | LOCATIONS  | Passes 3NF       |
@@ -189,7 +189,7 @@ USERS
 
 📌 Conclusion: Entire database is fully normalized to Third Normal Form (3NF).
 
-## 6.4 Assumptions
+## 3.4 Assumptions
 
 1. Time_Period in ANALYTICS represents an aggregation period (e.g., monthly).
 
@@ -203,6 +203,8 @@ USERS
 
 6. GPS coordinates are stored as unique identifiers for locations.
 
-## 6.5 EER DIAGRAM
+## 3.5 EER DIAGRAM
 ![EER Diagram](https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/EER%20Diagram.png?raw=true)
+
+The EER Diagram for the Road Accident Reporting & Blackspot Detection System visually confirms the normalized data model (Phase III) required to support the project's automation goals. The model centers on LOCATIONS as the primary entity, which links to three critical tables: ACCIDENTS via a 1 to Many relationship to record transactional data; BLACKSPOTS via a 1 to 1 relationship to hold the single, current risk classification status (High, Medium, Low); and ANALYTICS via a 1 to Many relationship to store pre-aggregated key performance indicators (KPIs) over various time periods. This structure is essential because it allows the PL/SQL Compound Trigger (Phase VII) to check the history of $\text{ACCIDENTS}$ for a specific $\text{Location ID}$ and quickly update the $\text{BLACKSPOTS}$ status, providing the near real-time intelligence needed for traffic authority decision-making.
  
