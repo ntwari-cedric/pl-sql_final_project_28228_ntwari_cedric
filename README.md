@@ -123,6 +123,7 @@ LOCATIONS 1 ─── ∞ ANALYTICS (FK: Location_ID)
 
 USERS 1 ─── ∞ ACCIDENTS (FK: User_ID)
 
+
 ## 6.2 Data Dictionary
 LOCATIONS
 | Attribute       | Type          | Constraints      |
