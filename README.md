@@ -216,7 +216,7 @@ Objective: Create and configure Oracle pluggable database.
 The environment uses a dedicated Pluggable Database named 
 tue_28228_cedric_roadaccident_db.
 # Command (Executed as SYSDBA):
-![EER Diagram] (https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/EER%20Diagram.png?raw=true)
+![pdb creation](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/create%20pgbdata%20base.png?raw=true)
 ## 4.2 Tablespace Configuration and Storage
 Dedicated tablespaces were created for data, indexes, and temporary files. All data files use the AUTOEXTEND ON parameter.
 
