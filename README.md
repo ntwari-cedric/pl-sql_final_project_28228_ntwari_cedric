@@ -232,3 +232,33 @@ Commands (Executed inside the PDB):
 after doing all thing ( creating and config the plugable database i create i connect it to my oracle sql developer where all the remaining phase will take place
 
 ## TABLE IMPLEMENTATION & DATA INSERTION (phase V)
+## Database Schema Creation & Data Population
+Successfully executed all CREATE TABLE statements with proper constraints,
+primary keys, foreign keys, and business rules. The foundation of our Road
+Accident Reporting System is now structurally complete and ready for data
+management operations.
+![table creation]()
+## Automated Primary Key Sequences
+Implemented Oracle sequences for all primary key columns to ensure unique
+identifier generation. This automated system guarantees data integrity and
+prevents duplicate entries while supporting scalable data growth across
+all entity tables
+![primary key sequences]()
+## Geographical Road Locations Data
+Populated the LOCATIONS table with 15 authentic Kigali road segments
+complete with GPS coordinates. This geographical foundation enables
+precise accident mapping and blackspot detection analysis throughout
+the city's road network. 
+![table location]()
+## Comprehensive Accident Records
+Loaded 10 detailed accident reports demonstrating various severity levels
+(Minor, Serious, Fatal) and diverse causes. Each record includes casualty
+statistics, timestamps, and location references for comprehensive traffic
+safety analysis and reporting.
+![table accident]()
+## Role-Based User Management System
+Configured 5 system user accounts with distinct roles (Admin, Analyst, Operator)
+implementing role-based access control. This security structure ensures
+appropriate data access levels while maintaining system integrity and
+audit compliance.
+![table user]()
