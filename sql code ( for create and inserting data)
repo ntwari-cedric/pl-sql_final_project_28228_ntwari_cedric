@@ -1,0 +1,94 @@
+-- Step 1: Create LOCATIONS table first (no dependencies)
+CREATE TABLE locations (
+    location_id NUMBER PRIMARY KEY,
+    road_name VARCHAR2(100) NOT NULL,
+    gps_coordinates VARCHAR2(50)
+);
+
+-- Step 2: Create ACCIDENTS table (depends on LOCATIONS)
+CREATE TABLE accidents (
+    accident_id NUMBER PRIMARY KEY,
+    location_id NUMBER NOT NULL,
+    date_time TIMESTAMP NOT NULL,
+    severity VARCHAR2(20) CHECK (severity IN ('Minor', 'Serious', 'Fatal')),
+    cause VARCHAR2(50),
+    injuries NUMBER DEFAULT 0,
+    deaths NUMBER DEFAULT 0,
+    CONSTRAINT fk_accidents_location FOREIGN KEY (location_id) REFERENCES locations(location_id)
+);
+
+-- Step 3: Create BLACKSPOTS table (depends on LOCATIONS)
+CREATE TABLE blackspots (
+    blackspot_id NUMBER PRIMARY KEY,
+    location_id NUMBER NOT NULL,
+    accident_count NUMBER DEFAULT 0,
+    risk_level VARCHAR2(20) CHECK (risk_level IN ('Low', 'Medium', 'High')),
+    CONSTRAINT fk_blackspots_location FOREIGN KEY (location_id) REFERENCES locations(location_id)
+);
+
+-- Step 4: Create USERS table (no dependencies)
+CREATE TABLE users (
+    user_id NUMBER PRIMARY KEY,
+    name VARCHAR2(100) NOT NULL,
+    role VARCHAR2(20) CHECK (role IN ('Admin', 'Analyst', 'Operator')),
+    username VARCHAR2(50) UNIQUE NOT NULL,
+    password VARCHAR2(100) NOT NULL
+);
+
+-- Step 5: Create ANALYTICS table (depends on LOCATIONS)
+CREATE TABLE analytics (
+    analytics_id NUMBER PRIMARY KEY,
+    location_id NUMBER NOT NULL,
+    time_period VARCHAR2(50),
+    total_accidents NUMBER DEFAULT 0,
+    fatal_accidents NUMBER DEFAULT 0,
+    CONSTRAINT fk_analytics_location FOREIGN KEY (location_id) REFERENCES locations(location_id)
+);
+
+
+-- Create sequences for auto-incrementing primary keys
+CREATE SEQUENCE seq_locations_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_accidents_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_blackspots_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_users_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_analytics_id START WITH 1 INCREMENT BY 1;
+
+
+-- Insert remaining locations
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'KN 1 Avenue, Kigali', '-1.9546, 30.0911');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'KN 2 Avenue, Kigali', '-1.9572, 30.0948');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'KN 3 Avenue, Kigali', '-1.9599, 30.0985');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'KK 15 Road, Kigali', '-1.9687, 30.1034');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'KG 7 Avenue, Kigali', '-1.9512, 30.0589');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Kicukiro Main Road', '-1.9856, 30.0923');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Nyabugogo Taxi Park', '-1.9408, 30.0447');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Kigali Heights Roundabout', '-1.9534, 30.0598');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Gisozi - Kacyiru Road', '-1.9345, 30.0876');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Remera - Gacuriro Road', '-1.9789, 30.1123');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Kimironko Bus Station', '-1.9456, 30.1345');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Nyarutarama Road', '-1.9234, 30.0765');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Kicukiro Center', '-1.9678, 30.0987');
+INSERT INTO locations (location_id, road_name, gps_coordinates) VALUES (seq_locations_id.NEXTVAL, 'Gikondo Roundabout', '-1.9876, 30.0654');
+
+-- Insert users
+INSERT INTO users (user_id, name, role, username, password) VALUES (seq_users_id.NEXTVAL, 'NTWARI Cedric', 'Admin', 'cedric_admin', 'cedric123');
+INSERT INTO users (user_id, name, role, username, password) VALUES (seq_users_id.NEXTVAL, 'Alice Uwase', 'Analyst', 'alice_analyst', 'password123');
+INSERT INTO users (user_id, name, role, username, password) VALUES (seq_users_id.NEXTVAL, 'John Mugisha', 'Operator', 'john_operator', 'password123');
+INSERT INTO users (user_id, name, role, username, password) VALUES (seq_users_id.NEXTVAL, 'Marie Uwimana', 'Analyst', 'marie_analyst', 'password123');
+INSERT INTO users (user_id, name, role, username, password) VALUES (seq_users_id.NEXTVAL, 'Paul Kagabo', 'Operator', 'paul_operator', 'password123');
+
+-- Insert accidents
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 1, TIMESTAMP '2024-01-15 08:30:00', 'Serious', 'Speeding', 2, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 2, TIMESTAMP '2024-01-16 14:20:00', 'Minor', 'Weather', 1, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 1, TIMESTAMP '2024-01-18 18:45:00', 'Fatal', 'Drunk Driving', 0, 1);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 3, TIMESTAMP '2024-01-20 07:15:00', 'Serious', 'Mechanical Failure', 3, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 2, TIMESTAMP '2024-01-22 16:30:00', 'Minor', 'Distracted Driving', 1, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 4, TIMESTAMP '2024-01-25 09:45:00', 'Serious', 'Speeding', 2, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 5, TIMESTAMP '2024-01-28 12:15:00', 'Fatal', 'Overtaking', 1, 2);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 1, TIMESTAMP '2024-02-02 17:30:00', 'Minor', 'Weather', 1, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 3, TIMESTAMP '2024-02-05 08:00:00', 'Serious', 'Tire Burst', 2, 0);
+INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths) VALUES (seq_accidents_id.NEXTVAL, 2, TIMESTAMP '2024-02-08 19:20:00', 'Minor', 'Distracted Driving', 1, 0);
+
+COMMIT;
+
+
