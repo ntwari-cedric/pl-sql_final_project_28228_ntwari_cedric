@@ -208,3 +208,27 @@ USERS
 
 The EER Diagram for the Road Accident Reporting & Blackspot Detection System visually confirms the normalized data model (Phase III) required to support the project's automation goals. The model centers on LOCATIONS as the primary entity, which links to three critical tables: ACCIDENTS via a 1 to Many relationship to record transactional data; BLACKSPOTS via a 1 to 1 relationship to hold the single, current risk classification status (High, Medium, Low); and ANALYTICS via a 1 to Many relationship to store pre-aggregated key performance indicators (KPIs) over various time periods. This structure is essential because it allows the PL/SQL Compound Trigger (Phase VII) to check the history of $\text{ACCIDENTS}$ for a specific $\text{Location ID}$ and quickly update the $\text{BLACKSPOTS}$ status, providing the near real-time intelligence needed for traffic authority decision-making.
  
+
+##  4.Database Creation(phase IV)
+Objective: Create and configure Oracle pluggable database.
+
+## 4.1 Database Creation (PDB Setup)
+The environment uses a dedicated Pluggable Database named 
+tue_28228_cedric_roadaccident_db.
+# Command (Executed as SYSDBA):
+![EER Diagram] (https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/EER%20Diagram.png?raw=true)
+## 4.2 Tablespace Configuration and Storage
+Dedicated tablespaces were created for data, indexes, and temporary files. All data files use the AUTOEXTEND ON parameter.
+
+Commands (Executed inside the PDB):
+![EER Diagram] (https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/EER%20Diagram.png?raw=true)
+
+## 4.3 User Setup and Application Credentials
+The main user for all object creation is road_accident_app, created with appropriate privileges (CONNECT, RESOURCE).
+
+Commands (Executed inside the PDB):
+![EER Diagram] (https://github.com/ntwari-cedric/ntwari-cedric-pl-sql_final_project_28228_ntwari_cedric/blob/main/EER%20Diagram.png?raw=true)
+
+after doing all thing ( creating and config the plugable database i create i connect it to my oracle sql developer where all the remaining
+phase will take place
+
