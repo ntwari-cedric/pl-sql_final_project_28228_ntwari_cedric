@@ -268,3 +268,34 @@ audit compliance.
 ![table user](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/user%20table.png?raw=true)
 
 ## Database Interaction & Transactions(PHASE VI)
+```sql
+create or replace PROCEDURE add_accident_report (
+    p_location_id IN NUMBER,
+    p_date_time IN TIMESTAMP,
+    p_severity IN VARCHAR2,
+    p_cause IN VARCHAR2,
+    p_injuries IN NUMBER,
+    p_deaths IN NUMBER,
+    p_accident_id OUT NUMBER
+)
+IS
+BEGIN
+    -- Generate new accident ID from sequence
+    SELECT seq_accidents_id.NEXTVAL INTO p_accident_id FROM DUAL;
+
+    -- Insert new accident record
+    INSERT INTO accidents (accident_id, location_id, date_time, severity, cause, injuries, deaths)
+    VALUES (p_accident_id, p_location_id, p_date_time, p_severity, p_cause, p_injuries, p_deaths);
+
+    -- Commit the transaction
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('Accident report added successfully. ID: ' || p_accident_id);
+
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error adding accident report: ' || SQLERRM);
+        ROLLBACK;
+        RAISE;
+END add_accident_report;
+```
