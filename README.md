@@ -304,3 +304,54 @@ EXCEPTION
         RAISE;
 END add_accident_report;
 ```
+The generate_blackspots procedure automatically analyzes all accident records in the system and identifies
+blackspots—locations with repeated accidents. A blackspot is defined as any location that has two or more accidents.
+
+This procedure helps the system determine danger-prone roads, calculate their risk level, and update the blackspots table accordingly.
+```sql
+create or replace PROCEDURE generate_blackspots
+IS
+    CURSOR location_cursor IS
+        SELECT l.location_id, l.road_name, COUNT(a.accident_id) as accident_count
+        FROM locations l
+        JOIN accidents a ON l.location_id = a.location_id
+        GROUP BY l.location_id, l.road_name
+        HAVING COUNT(a.accident_id) >= 2;  -- Locations with 2+ accidents
+
+    v_risk_level VARCHAR2(20);
+    v_blackspot_id NUMBER;
+BEGIN
+    -- Clear existing blackspots
+    DELETE FROM blackspots;
+
+    FOR location_rec IN location_cursor LOOP
+        -- Determine risk level based on accident count
+        IF location_rec.accident_count >= 3 THEN
+            v_risk_level := 'High';
+        ELSIF location_rec.accident_count = 2 THEN
+            v_risk_level := 'Medium';
+        ELSE
+            v_risk_level := 'Low';
+        END IF;
+
+        -- Generate new blackspot ID
+        SELECT seq_blackspots_id.NEXTVAL INTO v_blackspot_id FROM DUAL;
+
+        -- Insert into blackspots table
+        INSERT INTO blackspots (blackspot_id, location_id, accident_count, risk_level)
+        VALUES (v_blackspot_id, location_rec.location_id, location_rec.accident_count, v_risk_level);
+
+        DBMS_OUTPUT.PUT_LINE('Blackspot identified: ' || location_rec.road_name || 
+                            ' - ' || location_rec.accident_count || ' accidents - ' || v_risk_level);
+    END LOOP;
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Blackspot generation completed successfully.');
+
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error generating blackspots: ' || SQLERRM);
+        ROLLBACK;
+        RAISE;
+END generate_blackspots;
+```
