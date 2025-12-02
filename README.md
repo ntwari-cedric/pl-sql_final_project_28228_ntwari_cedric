@@ -355,3 +355,42 @@ EXCEPTION
         RAISE;
 END generate_blackspots;
 ```
+
+### function
+
+
+The get_severity_statistics function returns a summarized breakdown of all accidents recorded in the system based on their severity level. It analyzes the accidents table and counts how many accidents are categorized as Minor, Serious, and Fatal. After calculating these totals, the function formats them into a single readable text string such as:
+
+“Minor: X | Serious: Y | Fatal: Z”
+
+This makes it easy to display accident severity statistics in dashboards, reports, or monitoring interfaces without writing multiple separate queries. The function also includes safe error handling to ensure that if any issue occurs during calculation, it returns a clear error message instead of interrupting the application flow.
+
+
+
+```sql
+create or replace FUNCTION get_severity_statistics 
+RETURN VARCHAR2
+IS
+    v_minor_count    NUMBER;
+    v_serious_count  NUMBER;
+    v_fatal_count    NUMBER;
+    v_result         VARCHAR2(200);
+BEGIN
+    -- Count accidents by severity
+    SELECT COUNT(*) INTO v_minor_count FROM accidents WHERE severity = 'Minor';
+    SELECT COUNT(*) INTO v_serious_count FROM accidents WHERE severity = 'Serious';
+    SELECT COUNT(*) INTO v_fatal_count FROM accidents WHERE severity = 'Fatal';
+
+    -- Format the result
+    v_result := 'Minor: ' || v_minor_count || 
+                ' | Serious: ' || v_serious_count || 
+                ' | Fatal: ' || v_fatal_count;
+
+    RETURN v_result;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error calculating statistics';
+END get_severity_statistics;
+```
+
