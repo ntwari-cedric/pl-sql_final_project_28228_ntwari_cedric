@@ -268,6 +268,11 @@ audit compliance.
 ![table user](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/user%20table.png?raw=true)
 
 ## Database Interaction & Transactions(PHASE VI)
+
+### procedure
+
+first i create This PL/SQL stored procedure is used to insert a new accident report into the accidents table.
+It also generates a new accident ID automatically using a sequence and returns it to the caller
 ```sql
 create or replace PROCEDURE add_accident_report (
     p_location_id IN NUMBER,
