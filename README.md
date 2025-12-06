@@ -62,8 +62,8 @@ The BPMN diagram represents:
 -Risk-level notification
 
 BPMN Diagram:
-![BPMN Diagram](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/bpmn%202.png)
-![BPMN Diagram](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/bpmn%201.png)
+![BPMN Diagram](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/bpmn%202.png),
+(https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/bpmn%201.png)
 
 ## 2.2 Explanation
 
