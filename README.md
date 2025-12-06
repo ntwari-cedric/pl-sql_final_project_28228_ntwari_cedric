@@ -227,16 +227,34 @@ ALTER SESSION SET CONTAINER =TUE_28228_CEDRIC__PDTAS_DB;
 ```
 ## 4.2 Tablespace Configuration and Storage
 Dedicated tablespaces were created for data, indexes, and temporary files. All data files use the AUTOEXTEND ON parameter.
-
-Commands (Executed inside the PDB):
-![configaration of pdb](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/configuration.png?raw=true)
-
-## 4.3 User Setup and Application Credentials
 The main user for all object creation is road_accident_app, created with appropriate privileges (CONNECT, RESOURCE).
+```sql
+-- Step 4: Create Tablespaces
+CREATE TABLESPACE pdta_data 
+DATAFILE 'C:\dbms_oracle\oradata\XE\TUE_28228_CEDRIC_PDTAS_DB\pdta_data01.dbf'
+SIZE 50M AUTOEXTEND ON NEXT 10M MAXSIZE 500M;
 
-Commands (Executed inside the PDB):
-![tablespace creation](https://github.com/ntwari-cedric/pl-sql_final_project_28228_ntwari_cedric/blob/main/tablespace%20creation.png?raw=true)
+CREATE TABLESPACE pdta_index
+DATAFILE 'C:\dbms_oracle\oradata\XE\TUE_28228_CEDRIC_PDTAS_DB\pdta_index01.dbf'
+SIZE 20M AUTOEXTEND ON NEXT 5M MAXSIZE 200M;
 
+CREATE TEMPORARY TABLESPACE pdta_temp
+TEMPFILE 'C:\dbms_oracle\oradata\XE\TUE_28228_CEDRIC_PDTAS_DB\pdta_temp01.dbf'
+SIZE 20M AUTOEXTEND ON NEXT 5M MAXSIZE 100M;
+
+-- Step 5: Create Application User
+CREATE USER patient_track IDENTIFIED BY NTWARI
+DEFAULT TABLESPACE pdta_data
+TEMPORARY TABLESPACE pdta_temp
+QUOTA UNLIMITED ON pdta_data;
+
+GRANT CONNECT, RESOURCE, DBA TO patient_track;
+
+-- Verification Queries
+SELECT name, open_mode FROM v$pdbs;
+SELECT tablespace_name, status FROM dba_tablespaces;
+SELECT username, account_status FROM dba_users;
+```
 after doing all thing ( creating and config the plugable database i create i connect it to my oracle sql developer where all the remaining phase will take place
 
 ## TABLE IMPLEMENTATION & DATA INSERTION (phase V)
